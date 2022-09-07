@@ -13,10 +13,10 @@ class Address(models.Model):
 
     def __str__(self):
         return f'{self.number} {self.street}'
-    
+
     class Meta:
-         verbose_name = 'Address'
-         verbose_name_plural = 'Addresses'
+        verbose_name = 'Address'
+        verbose_name_plural = 'Addresses'
 
 
 class Letting(models.Model):
@@ -25,10 +25,10 @@ class Letting(models.Model):
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
-         verbose_name = 'Letting'
-         verbose_name_plural = 'Lettings'
+        verbose_name = 'Letting'
+        verbose_name_plural = 'Lettings'
 
 
 class Profile(models.Model):
@@ -37,7 +37,7 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+
     class Meta:
-         verbose_name = 'Profile'
-         verbose_name_plural = 'Profiles'
+        verbose_name = 'Profile'
+        verbose_name_plural = 'Profiles'
