@@ -1,5 +1,4 @@
 import pytest
-
 from django.test import TestCase
 from django.urls import reverse
 from lettings.models import Address, Letting
@@ -22,7 +21,7 @@ class TestLettings(TestCase):
             address=self.address
         )
 
-    def test_lettings_index_view(self):
+    def test_lettings_index(self):
         response = self.client.get(reverse('lettings:index'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'lettings/index.html')
