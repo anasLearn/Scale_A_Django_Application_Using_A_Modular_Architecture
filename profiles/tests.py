@@ -11,7 +11,7 @@ class TestProfiles(TestCase):
         self.user = User.objects.create_user(
             username='UserTest',
             email='user_test@test.com',
-            password='Abcd1234'            
+            password='Abcd1234'
         )
         self.profile = Profile.objects.create(
             user=self.user,
