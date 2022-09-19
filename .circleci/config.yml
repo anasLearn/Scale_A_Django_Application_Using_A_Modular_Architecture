@@ -15,6 +15,11 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
       - run:
+          name: Run linting
+          command: |
+            . venv/bin/activate
+            flake8
+      - run:
           name: Test with pytest
           command: |
             . venv/bin/activate
