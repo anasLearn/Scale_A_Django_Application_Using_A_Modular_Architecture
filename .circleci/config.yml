@@ -26,9 +26,10 @@ jobs:
       - run:
           name: Build and push Docker image to Heroku
           # 1. Install Heroku CLI on the build machine
-          # 2. Login to Heroku with HEROKU_API_KEY, avoiding to login
-          # 3. Build and push docker image to heroku registry
-          # 4. Publish to the website
+          # 2. Login to Heroku registry passing our Heroku API Key as a parameter
+          #    to don’t need to authenticate with the Heroku login command. 
+          # 3. Building and pushing our docker image to Heroku registry
+          # 4. Releasing the new version of our app
           command: |
             sudo curl https://cli-assets.heroku.com/install.sh | sh
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
