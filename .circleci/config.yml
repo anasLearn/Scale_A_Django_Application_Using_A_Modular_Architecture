@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: install dependencies and environment
+          name: Install dependencies and environment
           command: |
             python3 -m venv venv
             . venv/bin/activate
@@ -24,7 +24,26 @@ jobs:
           command: |
             . venv/bin/activate
             pytest
-  deploy-dev:
+  
+  build-and-push-to-dockerhub:
+    docker:
+      - image: circleci/python:3.9
+    
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Docker image
+          command: docker build -t $DOCKERHUB_USER/python-oc-lettings:$CIRCLE_SHA1 .
+      - run:
+          name: Push Docker Image
+          command: |
+            echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USER --password-stdin
+            docker tag $DOCKERHUB_USER/python-oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_USER/python-oc-lettings:lastest
+            docker push $DOCKERHUB_USER/python-oc-lettings:$CIRCLE_SHA1
+            docker push $DOCKERHUB_USER/python-oc-lettings:lastest
+
+  deploy-to-heroku:
     machine: true
     steps:
       - checkout
@@ -40,14 +59,21 @@ jobs:
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a oc-lettings-17 web
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a oc-lettings-17 web
+
 # Orchestrate our job run sequence
 workflows:
   main:
     jobs:
       - build-and-test
-      - deploy-dev:
+      - build-and-push-to-dockerhub:
           requires:
             - build-and-test
+          filters:
+            branches:
+              only: master # on the branch master only
+      - deploy-to-heroku:
+          requires:
+            - build-and-push-to-dockerhub
           filters:
             branches:
               only: master # on the branch master only
