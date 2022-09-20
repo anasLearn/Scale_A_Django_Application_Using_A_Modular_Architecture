@@ -4,7 +4,7 @@ version: 2.1
 jobs:
   build-and-test:
     docker:
-      - image: circleci/python:3.9
+      - image: cimg/python:3.9.4
     
     steps:
       - checkout
@@ -27,7 +27,7 @@ jobs:
   
   build-and-push-to-dockerhub:
     docker:
-      - image: circleci/python:3.9
+      - image: cimg/python:3.9.4
     
     steps:
       - checkout
