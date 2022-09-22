@@ -39,6 +39,16 @@ Dans le reste de la documentation sur le développement local, il est supposé q
 - Confirmer que la commande `pip` exécute l'exécutable pip dans l'environnement virtuel, `which pip`
 - Pour désactiver l'environnement, `deactivate`
 
+#### Gérer les variables d'environnement
+
+Créer un fichier nommé **.env** à la racine du projet puis stocker dans ce fichier les variables d'environnement ci-dessous :
+
+```yaml
+SECRET_KEY=<your-secret-key>
+DEBUG=True
+ALLOWED_HOSTS=localhost,0.0.0.0,127.0.0.1
+```
+
 #### Exécuter le site
 
 - `cd /path/to/Python-OC-Lettings-FR`
@@ -132,7 +142,7 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 
 	| Name  | Value
 	| :--------------: |:---------------: |
-	| ALLOWED_HOSTS  |  "your-app-name".herokuapp.com   |
+	| ALLOWED_HOSTS  |  [your-app-name].herokuapp.com   |
 	| DEBUG  | False  |
 	| DOCKERHUB_TOKEN  | YOUR DOCKERHUB TOKEN  |
 	| DOCKERHUB_USER  | YOUR DOCKERHUB USERNAME |
@@ -151,34 +161,18 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 
 ### Utilisation
 
-- Se connecter à Sentry et créer un nouveau projet
-- Récupérer le dsn ([Documentation](https://docs.sentry.io/platforms/python/guides/django/))
-- Ajouter le dsn dans les variables d'environnement du projet sur CircleCI :
+- Se connecter à Sentry et créer un nouveau projet en choisissant la plateforme Django.
+- Récupérer le DSN en allant dans **Organization settings** > **Projects**, choisissez votre projet puis cliquez sur **Client Keys(DSN)**.
+- Copiez le DSN et ajoutez le aux variables d'environnement du fichier **.env** ainsi que dans les variables d'environnement du projet sur CircleCI :
 	
 	| Clé  | Valeur
 	| :--------------: |:---------------: |
 	| SENTRY_DSN  |  YOUR SENTRY DSN KEY   |
 	
-- Test d'une erreur `https://[oc-lettings-xx].herokuapp.com/sentry-debug/`
-- Voir l'erreur `https://sentry.io/organizations/[SENTRY_ID]/issues/`
+- Test d'une erreur `https://[your-app-name].herokuapp.com/sentry-debug/`
+- Pour afficher et résoudre l'erreur enregistrée, connectez-vous à [sentry.io](https://sentry.io/organizations/[your-sentry-id]/issues/) et ouvrez votre projet. Cliquer sur le titre de l'erreur ouvrira une page où vous pourrez voir des informations détaillées et la marquer comme résolue.
 
 ## Extraire l'image de DockerHub et l'exécutez localement
 ### Prérequis
 - Installer [Docker Desktop](https://docs.docker.com/get-docker/)
-
-
-### Guide
-
-
-
-## Variables d'environnement
-
-Les variables d'environnement ci-dessous sont à placer dans un fichier nommé **.env** à la racine du projet :
-
-```yaml
-SECRET_KEY=<your-secret-key>
-DEBUG=True
-ALLOWED_HOSTS=localhost,0.0.0.0,127.0.0.1
-SENTRY_DSN='<your-sentry-dsn-key'
-```
 
