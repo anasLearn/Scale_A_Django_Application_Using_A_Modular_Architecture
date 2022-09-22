@@ -1,6 +1,13 @@
-## Résumé
+# Mettre à l'échelle une application Django en utilisant une architecture modulaire
+##Résumé
 
-Site web d'Orange County Lettings
+Amélioration du Site web d'Orange County Lettings :<br>
+
+- Réduction de la dette technique
+- Refonte de l'architecture modulaire
+- Mise en place d'un pipeline CI/CD utilisant CircleCI et Heroku
+- Surveillance de l'application et suivi des erreurs via Sentry
+
 
 ## Développement local
 
@@ -78,10 +85,17 @@ Utilisation de PowerShell, comme ci-dessus sauf :
 
 
 ## Déploiement
-Dans ce projet le deploiement de l'application sur Heroku est automatisé avec un pipeline CI/CD sur CircleCI.<br>
+
+### Prérequis
+- Compte [DockerHub](https://hub.docker.com/)
+- Compte [CircleCI](https://circleci.com/signup/)
+- Compte [Heroku](https://signup.heroku.com/)
+- Installer [Heroku CLI](https://devcenter.heroku.com/articles/getting-started-with-python#set-up)
+
+Dans ce projet le deploiement de l'application sur Heroku est automatisé avec un pipeline CI/CD CircleCI.<br>
 Les détails de la configuration du pipeline sont disponibles dans le fichier config.yml du dossier .circleci
 
-### Fonctionnement du déploiement :
+### Fonctionnement du déploiement
 
 - Lors d'un **git push** depuis la branche master du projet, le pipeline déclenche le linting et les tests.<br>Si le linting et les tests sont réussis, il déclenche la conteneurisation et envoie l'image sur DockerHub.<br>
 Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le déploiement de l'application sur Heroku.
@@ -92,55 +106,76 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 
 ![alt tag](https://user-images.githubusercontent.com/83015257/191265011-9c8ea0ae-fe32-485b-96c6-dec8045c2511.png)
 
-- Lien vers le Pipeline du projet sur CircleCI :<br> <https://dl.circleci.com/status-badge/redirect/gh/SelHel/Scale_A_Django_Application_Using_A_Modular_Architecture/tree/master>
+- Lien vers le Pipeline CircleCI du projet :<br> <https://dl.circleci.com/status-badge/redirect/gh/SelHel/Scale_A_Django_Application_Using_A_Modular_Architecture/tree/master>
 
-### Prérequis
 
-- Un compte [Github](https://github.com)
-- Un compte [DockerHub](https://hub.docker.com/)
-- Un compte [CircleCI](https://circleci.com/signup/)
-- Un compte [Heroku](https://signup.heroku.com/)
-- Installer [Heroku CLI](https://devcenter.heroku.com/articles/getting-started-with-python#set-up
 
-### Configuration du déploiement
-#### CircleCI
-- Vous devez créer un nouveau projet sur CircleCI et le lier à votre repository GitHub.
+### Guide de déploiement
+
+####Étape 1:DockerHub
+- Se connecter à DockerHub et créer un nouveau repository (Pensez à modifier le nom du repository DockerHub dans le fichier de configuration .circleci/config.yml)
+
+- Ensuite vous devez générer un Access token. ([Voir documentation](https://docs.docker.com/docker-hub/access-tokens/))<br>
+(Vous devrez le renseigner dans les variables d'environnement de votre projet CircleCI)
+
+####Étape 2:Heroku
+- Se connecter à Heroku et créer une nouvelle application (Pensez à modifier le nom de l'application Heroku dans le fichier de configuration .circleci/config.yml)
+
+- Ensuite vous devez générer un API token en utilisant Heroku CLI. ([Voir documentation](https://devcenter.heroku.com/articles/authentication))<br>
+(Vous devrez le renseigner dans les variables d'environnement de votre projet CircleCI)
+
+####Étape 3:CircleCI
+
+- Se connecter à CircleCI, créer un nouveau projet lier à votre repository GitHub.
 - Sélectionnez la branche master comme source pour le fichier .circleci/config.yml
+- Ensuite vous devez définir les variables d'environnement suivantes dans les Settings de votre projet :
+
+	| Name  | Value
+	| :--------------: |:---------------: |
+	| ALLOWED_HOSTS  |  localhost,0.0.0.0,127.0.0.1,your-app-name.herokuapp.com   |
+	| DEBUG  | False  |
+	| DOCKERHUB_TOKEN  | YOUR DOCKERHUB TOKEN  |
+	| DOCKERHUB_USER  | YOUR DOCKERHUB USERNAME |
+	| HEROKU_TOKEN  | YOUR HEROKU API TOKEN  |
+	| SECRET_KEY  | YOUR DJANGO SECRET KEY  |
 
 
-- Créer un projet DockerHub.
-- Créer un projet Heroku.
-- Obtenir un token d'authentification Heroku. ([Documentation](https://devcenter.heroku.com/articles/authentication))
-- Renseigner les variables d'environnement.
+- Vous pouvez maintenant déployer votre application en utilisant circleCI, il vous suffira simplement d'effectuer un **git push** depuis une de vos branches pour que le pipeline déclenche automatiquement les étapes précédentes.
 
-- Après le déploiement le site est accessible à l'adresse suivante: [https://oc-lettings-17.herokuapp.com](https://oc-lettings-17.herokuapp.com)
 
 ## Surveillance de l'application et suivi des erreurs via Sentry
 
-Sentry est une application de suivi d'exceptions non gérées.
-
 ### Prérequis
 
-- Un compte [Sentry](https://sentry.io/signup/)
+- Un compte [Sentry](https://sentry.io/signup/) (connexion avec github)
 
 ### Utilisation
 
 - Créer un projet Sentry
-- Ajouter l'adresse obtenue aux variables d'environnement.
+- Récupérer le dsn ([Documentation](https://docs.sentry.io/platforms/python/guides/django/))
+- Ajouter le dsn dans les variables d'environnement du projet sur CircleCI :
+	
+	| Clé  | Valeur
+	| :--------------: |:---------------: |
+	| SENTRY_DSN  |  YOUR SENTRY DSN KEY   |
+	
+- Test d'une erreur `https://[oc-lettings-xx].herokuapp.com/sentry-debug/`
+- Voir l'erreur `https://sentry.io/organizations/[SENTRY_ID]/issues/`
+
+## Extraire l'image de DockerHub et l'exécutez localement
+### Prérequis
+- Installer [Docker Desktop](https://docs.docker.com/get-docker/)
+
+
 
 ## Variables d'environnement
 
-Les variables d'environnement sont des données sensibles à dissimuler du public, elle sont à placer à plusieurs endroits:
-- Dans un fichier nommé **.env** à la racine du projet
-- Dans la configuration du projet dans CircleCI
+Les variables d'environnement ci-dessous sont à placer dans un fichier nommé **.env** à la racine du projet :
 
-| Clé  | Valeur          | Lieu |
-| :--------------: |:---------------:|:---------:|
-| SECRET_KEY  |   Clé secrète DJANGO  | Fichier/CircleCI |
-| DEBUG  | True / False  | Fichier/CircleCI |
-| ALLOWED_HOSTS  | localhost,0.0.0.0,127.0.0.1,<your-app>.herokuapp.com  | Fichier/CircleCI |
-| DOCKERHUB_USER  | Utilisateur DockerHub  | CircleCI |
-| DOCKERHUB_TOKEN  | Token de connexion DockerHub  | CircleCI |
-| HEROKU_TOKEN  | Tocken de connexion Heroku  | CircleCI |
-| SENTRY  | Adresse Sentry  | Fichier/CircleCI |
+```yaml
+SECRET_KEY=<your-secret-key>
+DEBUG=True
+ALLOWED_HOSTS=localhost,0.0.0.0,127.0.0.1,<your-app-name>.herokuapp.com
+SENTRY_DSN='<your-sentry-dsn-key'
+```
 
