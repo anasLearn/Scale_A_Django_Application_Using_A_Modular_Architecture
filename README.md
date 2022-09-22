@@ -132,7 +132,7 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 
 	| Name  | Value
 	| :--------------: |:---------------: |
-	| ALLOWED_HOSTS  |  localhost,0.0.0.0,127.0.0.1,your-app-name.herokuapp.com   |
+	| ALLOWED_HOSTS  |  "your-app-name".herokuapp.com   |
 	| DEBUG  | False  |
 	| DOCKERHUB_TOKEN  | YOUR DOCKERHUB TOKEN  |
 	| DOCKERHUB_USER  | YOUR DOCKERHUB USERNAME |
@@ -151,7 +151,7 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 
 ### Utilisation
 
-- Créer un projet Sentry
+- Se connecter à Sentry et créer un nouveau projet
 - Récupérer le dsn ([Documentation](https://docs.sentry.io/platforms/python/guides/django/))
 - Ajouter le dsn dans les variables d'environnement du projet sur CircleCI :
 	
@@ -167,6 +167,9 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 - Installer [Docker Desktop](https://docs.docker.com/get-docker/)
 
 
+### Guide
+
+
 
 ## Variables d'environnement
 
@@ -175,7 +178,7 @@ Les variables d'environnement ci-dessous sont à placer dans un fichier nommé *
 ```yaml
 SECRET_KEY=<your-secret-key>
 DEBUG=True
-ALLOWED_HOSTS=localhost,0.0.0.0,127.0.0.1,<your-app-name>.herokuapp.com
+ALLOWED_HOSTS=localhost,0.0.0.0,127.0.0.1
 SENTRY_DSN='<your-sentry-dsn-key'
 ```
 
