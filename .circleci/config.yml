@@ -1,13 +1,16 @@
+# This indicates the version of the CircleCI platform used
 version: 2.1
 
 # Define the jobs we want to run for this project
 jobs:
-  build-and-test:
-    docker:
-      - image: cimg/python:3.9.4
-    
-    steps:
-      - checkout
+  build-and-test: # This is the name of the job, the first job Build the docker image, run tests and linting
+    # This indicates that we are using a Docker image for the container in which our task's commands are executed.
+    docker: 
+      - image: cimg/python:3.9.4 # This is the Docker image name
+
+    # The steps collection is a list of run directives.
+    steps: 
+      - checkout #
       - run:
           name: Install dependencies and environment
           command: |
@@ -16,44 +19,50 @@ jobs:
             pip install -r requirements.txt
       - run:
           name: Run linting
+          # This command run flake8
           command: |
             . venv/bin/activate
             flake8
       - run:
           name: Test with pytest
+          # This command run pytest
           command: |
             . venv/bin/activate
             pytest
-  
-  build-and-push-to-dockerhub:
+
+  build-and-push-to-dockerhub: # This is the name of the job, the second job Build and Push the Docker image to Docker Hub
     docker:
       - image: cimg/python:3.9.4
     
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker # This activates the remote Docker environment
       - run:
           name: Build Docker image
           command: docker build -t $DOCKERHUB_USER/python-oc-lettings:$CIRCLE_SHA1 .
       - run:
           name: Push Docker Image
+          # 1. Login to DockerHub
+          # 2. Set
+          # 4. Releasing the new version of our app
           command: |
             echo $DOCKERHUB_TOKEN | docker login -u $DOCKERHUB_USER --password-stdin
             docker tag $DOCKERHUB_USER/python-oc-lettings:$CIRCLE_SHA1 $DOCKERHUB_USER/python-oc-lettings:lastest
             docker push $DOCKERHUB_USER/python-oc-lettings:$CIRCLE_SHA1
             docker push $DOCKERHUB_USER/python-oc-lettings:lastest
 
-  deploy-to-heroku:
+  deploy-to-heroku: # This is the name of the job, the third job deploy the application to Heroku
     machine: true
     steps:
       - checkout
       - run:
           name: Build and push Docker image to Heroku
           # 1. Install Heroku CLI on the build machine
-          # 2. Login to Heroku registry passing our Heroku API Key as a parameter
+          # 2. Set config vars
+          # 3. Login to Heroku registry passing our Heroku API Key as a parameter
           #    to don’t need to authenticate with the Heroku login command. 
-          # 3. Building and pushing our docker image to Heroku registry
-          # 4. Releasing the new version of our app
+          # 4. Building and pushing our docker image to Heroku registry
+          # 5. Releasing the new version of our app
           command: |
             sudo curl https://cli-assets.heroku.com/install.sh | sh
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set SECRET_KEY=$SECRET_KEY -a oc-lettings-17
@@ -66,18 +75,18 @@ jobs:
 
 # Orchestrate our job run sequence
 workflows:
-  main:
+  main: # This is the name of the workflow
     jobs:
       - build-and-test
       - build-and-push-to-dockerhub:
           requires:
-            - build-and-test
+            - build-and-test # only run build-and-push-to-dockerhub job if the build-and-test job has completed
           filters:
             branches:
-              only: master # on the branch master only
+              only: master # only run build-and-push-to-dockerhub job on master branch
       - deploy-to-heroku:
           requires:
-            - build-and-push-to-dockerhub
+            - build-and-push-to-dockerhub # only run deploy-to-heroku job if the build-and-push-to-dockerhub job has completed
           filters:
             branches:
-              only: master # on the branch master only
+              only: master # only run deploy-to-heroku job on master branch
