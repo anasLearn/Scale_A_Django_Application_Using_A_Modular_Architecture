@@ -136,8 +136,10 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 
 ####Étape 3:CircleCI
 
-- Se connecter à CircleCI, créer un nouveau projet lier à votre repository GitHub.
-- Sélectionnez la branche master comme source pour le fichier .circleci/config.yml
+- Se connecter à CircleCI, créer un nouveau projet lié à votre repository GitHub.
+
+- Sélectionner la branche master comme source pour le fichier .circleci/config.yml
+
 - Ensuite vous devez définir les variables d'environnement suivantes dans les Settings de votre projet :
 
 	| Name  | Value
@@ -150,7 +152,7 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 	| SECRET_KEY  | YOUR DJANGO SECRET KEY  |
 
 
-- Vous pouvez maintenant déployer votre application en utilisant circleCI, il vous suffira simplement d'effectuer un **git push** depuis une de vos branches pour que le pipeline déclenche automatiquement les étapes précédentes.
+- Vous pouvez maintenant déployer votre application en utilisant CircleCI, il vous suffira simplement d'effectuer un **git push** depuis l'une de vos branches pour que le pipeline déclenche automatiquement les étapes précédentes.
 
 
 ## Surveillance de l'application et suivi des erreurs via Sentry
@@ -162,17 +164,39 @@ Si la conteneurisation et l'envoi de l'image sont réussis, il exécute le dépl
 ### Utilisation
 
 - Se connecter à Sentry et créer un nouveau projet en choisissant la plateforme Django.
+
 - Récupérer le DSN en allant dans **Organization settings** > **Projects**, choisissez votre projet puis cliquez sur **Client Keys(DSN)**.
-- Copiez le DSN et ajoutez le aux variables d'environnement du fichier **.env** ainsi que dans les variables d'environnement du projet sur CircleCI :
+
+- Copiez le DSN et ajoutez le aux variables d'environnement du fichier **.env** ainsi qu'aux variables d'environnement du projet sur CircleCI :
 	
 	| Clé  | Valeur
 	| :--------------: |:---------------: |
 	| SENTRY_DSN  |  YOUR SENTRY DSN KEY   |
 	
 - Test d'une erreur `https://[your-app-name].herokuapp.com/sentry-debug/`
-- Pour afficher et résoudre l'erreur enregistrée, connectez-vous à [sentry.io](https://sentry.io/organizations/[your-sentry-id]/issues/) et ouvrez votre projet. Cliquer sur le titre de l'erreur ouvrira une page où vous pourrez voir des informations détaillées et la marquer comme résolue.
+
+- Pour afficher et résoudre l'erreur enregistrée, connectez-vous à [sentry.io](https://sentry.io/organizations/[your-sentry-id]/issues/) et ouvrez votre projet.<br>
+Cliquer sur le titre de l'erreur, une page s'ouvrira, vous pourrez voir des informations détaillées et la marquer comme résolue.
 
 ## Extraire l'image de DockerHub et l'exécutez localement
 ### Prérequis
 - Installer [Docker Desktop](https://docs.docker.com/get-docker/)
 
+### Pour extraire et exécuter l'image à partir de Docker Hub :
+
+- Lancez l'application Docker Desktop
+
+- Dans un terminal ou dans l'invite de commandes exécutez la commande suivante :
+```docker run -p 8000:8000 selhel/python-oc-lettings:latest```
+
+- Si vous ne disposez pas de l'image en local, Docker ira la télécharger sur le registre.
+
+- Le site lancé localement sera disponible à l'adresse : [http://localhost:8000](http://localhost:8000)
+
+
+## Lien vers l'application deployée sur Heroku
+
+- [https://oc-lettings-17.herokuapp.com](https://oc-lettings-17.herokuapp.com)
+
+## Auteur
+**Selim Helaoui**
