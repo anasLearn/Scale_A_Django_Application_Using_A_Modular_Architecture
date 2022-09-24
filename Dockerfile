@@ -23,6 +23,13 @@ RUN pip install -r requirements.txt
 COPY . /app
 
 # 
+ENV SECRET_KEY=static
+ENV ALLOWED_HOSTS=static
+ENV DATABASE_URL=static
+ENV CORS_ORIGIN_WHITELIST=static
+ENV REGISTER_VERIFICATION_URL=static
+ENV RESET_PASSWORD_VERIFICATION_URL=static
+ENV REGISTER_EMAIL_VERIFICATION_URL=static
 RUN python manage.py collectstatic --noinput
 
 # Indicates which port the container will be executed on.
