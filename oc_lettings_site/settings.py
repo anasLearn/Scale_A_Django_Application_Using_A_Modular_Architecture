@@ -1,5 +1,6 @@
 import os
 import sentry_sdk
+import django_heroku
 from sentry_sdk.integrations.django import DjangoIntegration
 from dotenv import load_dotenv
 
@@ -131,3 +132,8 @@ sentry_sdk.init(
     # django.contrib.auth) you may enable sending PII data.
     send_default_pii=True
 )
+
+# Configure Django App for Heroku using django_heroku module.
+# This will automatically configure DATABASE_URL, ALLOWED_HOSTS, WhiteNoise (for static assets),
+# Logging, and Heroku CI for your application.
+django_heroku.settings(locals())
