@@ -69,7 +69,13 @@ jobs: # Jobs are the building blocks of your config. Jobs are collections of ste
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a oc-lettings-17 web
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a oc-lettings-17 web
-            HEROKU_API_KEY=${HEROKU_TOKEN} heroku run python manage.py -x collectstatic --noinput -a oc-lettings-17
+
+      - run:
+          name: run collectstatic
+          command: |
+            . venv/bin/activate
+            python3 manage.py -x collectstatic --noinput
+
 
 
 workflows: # A workflow is a set of rules for defining a collection of jobs and their run order.
