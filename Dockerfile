@@ -9,18 +9,27 @@ FROM python:3.9.4
 # This instructs Docker to use this path as the default location for all subsequent commands.
 WORKDIR /app
 
+# set environment variable
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PORT 8000
+
 # Copy the dependencies file to the working directory.
-COPY requirements.txt .
+COPY requirements.txt requirements.txt
 
 # Upgrade pip and install dependencies.
-RUN pip install --upgrade pip pip \
-    && pip install -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
 # Copy our source code into the working directory.
-COPY . /app
+COPY . .
+VOLUME /app
 
 # collect static files
 RUN python manage.py collectstatic --noinput
+
+# Indicates which port the container will be executed on.
+EXPOSE 8000
 
 # Indicates which statement should run when your container is launched, run gunicorn.
 CMD gunicorn oc_lettings_site.wsgi:application --bind 0.0.0.0:$PORT
