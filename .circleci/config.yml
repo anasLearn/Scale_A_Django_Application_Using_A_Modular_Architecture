@@ -64,11 +64,12 @@ jobs: # Jobs are the building blocks of your config. Jobs are collections of ste
             sudo curl https://cli-assets.heroku.com/install.sh | sh
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set SECRET_KEY=$SECRET_KEY -a oc-lettings-17
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set SENTRY_DSN=$SENTRY_DSN -a oc-lettings-17
-            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set DEBUG=False -a oc-lettings-17
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set DEBUG=$DEBUG -a oc-lettings-17
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set ALLOWED_HOSTS=$ALLOWED_HOSTS -a oc-lettings-17
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a oc-lettings-17 web
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a oc-lettings-17 web
+            HEROKU_API_KEY=${HEROKU_TOKEN} python manage.py collectstatic --noinput -a oc-lettings-17 web
 
 workflows: # A workflow is a set of rules for defining a collection of jobs and their run order.
   main: # This is the name of the workflow
