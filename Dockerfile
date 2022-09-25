@@ -3,29 +3,26 @@
 # and allows older Docker versions with BuildKit enabled to upgrade the parser before starting the build.
 
 # Tells Docker what base image we would like to use for our application.
-FROM python:3.9.4
+FROM python:3.9
 
 # Create a working directory.
 # This instructs Docker to use this path as the default location for all subsequent commands.
 WORKDIR /app
 
-# set environment variable
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV PORT 8000
+# Set environment variables
+ENV DEBUG=False
+ENV PORT=8000
 
 # Copy the dependencies file to the working directory.
-COPY requirements.txt requirements.txt
+COPY requirements.txt .
 
-# Upgrade pip and install dependencies.
-RUN pip install --upgrade pip
+# Install dependencies.
 RUN pip install -r requirements.txt
 
 # Copy our source code into the working directory.
-COPY . .
-VOLUME /app
+COPY . /app
 
-# collect static files
+#
 RUN python manage.py collectstatic --noinput
 
 # Indicates which port the container will be executed on.

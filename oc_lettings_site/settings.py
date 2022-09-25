@@ -1,5 +1,7 @@
 import os
 import sentry_sdk
+
+from django.core.management.utils import get_random_secret_key
 # import django_heroku
 from sentry_sdk.integrations.django import DjangoIntegration
 from dotenv import load_dotenv
@@ -14,10 +16,10 @@ load_dotenv()  # take environment variables from .env
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = str(os.getenv('SECRET_KEY'))
+SECRET_KEY = str(os.getenv('SECRET_KEY', default=get_random_secret_key()))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if os.getenv('DEBUG') == 'False' else True
+DEBUG = False if os.getenv('DEBUG', default=True) == 'False' else True
 
 ALLOWED_HOSTS = ['oc-lettings-17.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
