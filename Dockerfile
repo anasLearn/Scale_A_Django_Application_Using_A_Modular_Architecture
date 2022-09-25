@@ -24,6 +24,7 @@ COPY . /app
 
 #
 RUN mkdir staticfiles
+RUN mkdir whitenoise
 RUN mkdir whitenoise/staticfiles
 RUN python manage.py collectstatic --noinput
 
