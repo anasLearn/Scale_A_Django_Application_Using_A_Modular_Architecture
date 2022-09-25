@@ -23,6 +23,8 @@ RUN pip install -r requirements.txt
 COPY . /app
 
 #
+RUN mkdir staticfiles
+RUN mkdir whitenoise/staticfiles
 RUN python manage.py collectstatic --noinput
 
 # Indicates which port the container will be executed on.
