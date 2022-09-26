@@ -18,11 +18,22 @@ load_dotenv()  # take environment variables from .env
 SECRET_KEY = str(os.getenv('SECRET_KEY', default=get_random_secret_key()))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if os.getenv('DEBUG', default=True) == 'False' else True
+if os.getenv('DEBUG', default='') == 'False':
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = ['oc-lettings-17.herokuapp.com', '127.0.0.1', '0.0.0.0']
+if os.getenv("HEROKU_APP_NAME", default=None) is not None:
+    heroku_app_name = os.getenv("HEROKU_APP_NAME")
+    ALLOWED_HOSTS = [f"{heroku_app_name}.herokuapp.com"]
+    CSRF_TRUSTED_ORIGINS = [
+        f"http://{heroku_app_name}.herokuapp.com",
+        f"https://{heroku_app_name}.herokuapp.com"
+    ]
 
-CSRF_TRUSTED_ORIGINS = ['https://oc-lettings-17.herokuapp.com']
+else:
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost').split(',')
+    CSRF_TRUSTED_ORIGINS = [os.getenv('CSRF_TRUSTED_ORIGINS', default='https://localhost')]
 
 
 # Application definition

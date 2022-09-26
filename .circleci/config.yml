@@ -62,13 +62,15 @@ jobs: # Jobs are the building blocks of your config. Jobs are collections of ste
           # 5. Releasing the new version of our app
           command: |
             sudo curl https://cli-assets.heroku.com/install.sh | sh
-            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set SECRET_KEY=$SECRET_KEY -a oc-lettings-17
-            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set SENTRY_DSN=$SENTRY_DSN -a oc-lettings-17
-            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set DEBUG=$DEBUG -a oc-lettings-17
-            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set ALLOWED_HOSTS=$ALLOWED_HOSTS -a oc-lettings-17
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set HEROKU_APP_NAME=$HEROKU_APP_NAME -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set ALLOWED_HOSTS=$ALLOWED_HOSTS -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set CSRF_TRUSTED_ORIGINS=$CSRF_TRUSTED_ORIGINS -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set DEBUG=$DEBUG -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set SECRET_KEY=$SECRET_KEY -a $HEROKU_APP_NAME
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku config:set SENTRY_DSN=$SENTRY_DSN -a $HEROKU_APP_NAME
             HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:login
-            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a oc-lettings-17 web
-            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a oc-lettings-17 web
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:push -a $HEROKU_APP_NAME web
+            HEROKU_API_KEY=${HEROKU_TOKEN} heroku container:release -a $HEROKU_APP_NAME web
 
 
 workflows: # A workflow is a set of rules for defining a collection of jobs and their run order.
