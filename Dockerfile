@@ -10,7 +10,6 @@ FROM python:3.9
 WORKDIR /app
 
 # Set environment variables
-ENV DEBUG=False
 ENV PORT=8000
 
 # Copy the dependencies file to the working directory.

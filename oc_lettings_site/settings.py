@@ -23,6 +23,8 @@ DEBUG = False if os.getenv('DEBUG', default=True) == 'False' else True
 
 ALLOWED_HOSTS = ['oc-lettings-17.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
+CSRF_TRUSTED_ORIGINS = ['https://front.bluemix.net']
+
 
 # Application definition
 
