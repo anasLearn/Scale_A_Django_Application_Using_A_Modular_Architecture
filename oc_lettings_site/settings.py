@@ -23,7 +23,7 @@ DEBUG = False if os.getenv('DEBUG', default=True) == 'False' else True
 
 ALLOWED_HOSTS = ['oc-lettings-17.herokuapp.com', '127.0.0.1', '0.0.0.0']
 
-CSRF_TRUSTED_ORIGINS = ['https://herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://oc-lettings-17.herokuapp.com']
 
 
 # Application definition
