@@ -32,7 +32,7 @@ if os.getenv("HEROKU_APP_NAME", default=None) is not None:
     ]
 
 else:
-    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost').split(',')
+    ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='localhost,0.0.0.0').split(',')
     CSRF_TRUSTED_ORIGINS = [os.getenv('CSRF_TRUSTED_ORIGINS', default='https://localhost')]
 
 
