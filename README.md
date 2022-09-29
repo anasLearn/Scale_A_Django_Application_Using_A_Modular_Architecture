@@ -188,7 +188,7 @@ Cliquer sur le titre de l'erreur, une page s'ouvrira, vous pourrez voir des info
 - Lancez l'application Docker Desktop
 
 - Dans un terminal ou dans l'invite de commandes exécutez la commande suivante :
-```docker run -p 8000:8000 selhel/python-oc-lettings:latest```
+```docker run --pull always -p 8000:8000 selhel/python-oc-lettings:latest```
 
 - Si vous ne disposez pas de l'image en local, Docker ira la télécharger sur le registre.
 
